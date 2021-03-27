@@ -63,8 +63,8 @@ const eventoBotones = (data) => {
             cantidad: 1,
             precioTotal: Math.round(((document.getElementsByClassName("value-ancho")[producto.id-1].value 
                             * document.getElementsByClassName("value-alto")[producto.id-1].value)
-                            / producto.precio)),
-                            //+20),
+                            / producto.precio)
+                            +20),
                   
         }
 
