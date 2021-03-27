@@ -1,0 +1,50 @@
+[
+  {
+    "precio": 18,
+    "id": 1,
+    "title": "Blackout White",
+    "ancho": "Ancho",
+    "alto":"Alto",
+    "thumbnailUrl": "./pic/100.jpg"
+  },
+  {
+    "precio": 18,
+    "id": 2,
+    "title": "Blackout Beige",
+    "ancho": "Ancho",
+    "alto":"Alto",
+    "thumbnailUrl": "./pic/200.jpg"
+  },
+  {
+    "precio": 18,
+    "id": 3,
+    "title": "Blackout Grey",
+    "ancho": "Ancho",
+    "alto":"Alto",
+    "thumbnailUrl": "./pic/300.jpg"
+  },
+  {
+    "precio": 18,
+    "id": 4,
+    "title": "Office White",
+    "ancho": "Ancho",
+    "alto":"Alto",
+    "thumbnailUrl": "./pic/400.jpg"
+  },
+  {
+    "precio": 18,
+    "id": 5,
+    "title": "Sunscreen White",
+    "ancho": "Ancho",
+    "alto":"Alto",
+    "thumbnailUrl": "./pic/500.jpg"
+  },
+  {
+    "precio": 18,
+    "id": 6,
+    "title": "Sunscreen Grey",
+    "ancho": "Ancho",
+    "alto":"Alto",
+    "thumbnailUrl": "./pic/600.jpg"
+  }
+]
