@@ -27,7 +27,8 @@ const pintarTemplate = (data) => {
     template.querySelector("h4").textContent = producto.title;
     template.querySelector(".card-ancho").textContent = producto.ancho;
     template.querySelector(".card-alto").textContent = producto.alto;
-    //template.querySelector(".card-text span").textContent = producto.precio;
+    template.querySelector(".tag-ancho-error").textContent = "";
+    template.querySelector(".tag-alto-error").textContent = "";
     // https://developer.mozilla.org/es/docs/Web/API/HTMLElement/dataset
     template.querySelector("button").setAttribute("data-id", producto.id);
     const clone = template.cloneNode(true);
@@ -41,42 +42,54 @@ const eventoBotones = (data) => {
   const btnAgregar = document.querySelectorAll(".btn-dark");
   btnAgregar.forEach((btn) => {
     btn.addEventListener("click", () => {
-        // console.log(btn.dataset.id)
-        // Buscamos el producto en nuestra data
-        // console.log(parseInt(btn.dataset.id))
         const [producto] = data.filter(
             (item) => item.id === parseInt(btn.dataset.id)
         );
-        //console.log(producto)
-         
-        //console.log(document.getElementById("fila").innerText)
-        //console.log(document.getElementsByClassName("value-ancho")[producto.id-1].value)
-        //console.log(document.querySelectorAll('.btn-dark:checked'))
-        
+
         // creamos un producto para el carrito
-        
         const productoCarrito = {
             id: ++count,
             title: producto.title,
-            ancho: document.getElementsByClassName("value-ancho")[producto.id-1].value,
-            alto: document.getElementsByClassName("value-alto")[producto.id-1].value,
+            ancho: Math.trunc(Number(document.getElementsByClassName("value-ancho")[producto.id-1].value)),
+            alto: Math.trunc(Number(document.getElementsByClassName("value-alto")[producto.id-1].value)),
             cantidad: 1,
-            precioTotal: Math.round(((document.getElementsByClassName("value-ancho")[producto.id-1].value 
-                            * document.getElementsByClassName("value-alto")[producto.id-1].value)
-                            / producto.precio)
-                            +20),
-                  
         }
 
-        const exiteEnCarrito = carrito.some(item => //item.id === productoCarrito.id
-                                                     item.ancho === productoCarrito.ancho
+        // valores minimos y maximos
+        document.documentElement.scrollTop = 10000000;
+        document.getElementsByClassName("tag-ancho-error")[producto.id-1].textContent = ""
+        document.getElementsByClassName("tag-alto-error")[producto.id-1].textContent = ""
+        if (productoCarrito.ancho < producto.min) {
+            productoCarrito.ancho = producto.min
+            document.getElementsByClassName("value-ancho")[producto.id-1].value = producto.min
+            document.getElementsByClassName("tag-ancho-error")[producto.id-1].textContent = "Min."
+        } else if (productoCarrito.ancho > producto.max) {
+            productoCarrito.ancho = producto.max
+            document.getElementsByClassName("value-ancho")[producto.id-1].value = producto.max
+            document.getElementsByClassName("tag-ancho-error")[producto.id-1].textContent = "Max."
+        }
+        if (productoCarrito.alto < producto.min) {
+            productoCarrito.alto = producto.min
+            document.getElementsByClassName("value-alto")[producto.id-1].value = producto.min
+            document.getElementsByClassName("tag-alto-error")[producto.id-1].textContent = "Min."
+            //document.getElementsByClassName("value-alto")[producto.id-1].value
+        } else if (productoCarrito.alto > producto.max) {
+            productoCarrito.alto = producto.max
+            document.getElementsByClassName("value-alto")[producto.id-1].value = producto.max
+            document.getElementsByClassName("tag-alto-error")[producto.id-1].textContent = "Max."
+        }
+        document.getElementsByClassName("value-ancho")[producto.id-1].value = productoCarrito.ancho
+        document.getElementsByClassName("value-alto")[producto.id-1].value = productoCarrito.alto
+        productoCarrito.precioTotal = Math.round((( productoCarrito.ancho 
+                                                    * productoCarrito.alto)
+                                                    / producto.precio)
+                                                    + 20)
+
+        const exiteEnCarrito = carrito.some(item => item.ancho === productoCarrito.ancho
                                                     && item.alto === productoCarrito.alto
                                                     && item.title === productoCarrito.title )
-        // console.log(exiteEnCarrito)
         if (exiteEnCarrito) {
             const productos = carrito.map(item => {
-                console.log(item.ancho)
-                console.log(productoCarrito.ancho)
                 if (item.id === productoCarrito.id
                     && item.ancho === productoCarrito.ancho
                     && item.alto === productoCarrito.alto) {
@@ -99,15 +112,13 @@ const eventoBotones = (data) => {
 
 const totalFooter = () => {
     if (carrito.length === 0) {
-        footerCarrito.innerHTML = `<th scope="row" colspan="5">Carrito vacío - comience a comprar!</th>`
+        footerCarrito.innerHTML = `<th scope="row" colspan="5">Empty Cart</th>`
+        document.getElementById("hacer-pedido").hidden = true
         return
     }
 
     const nProductos = carrito.reduce((a, b) => ({ cantidad: a.cantidad + b.cantidad }))
-    // console.log(nProductos.cantidad)
-
     const nPrecio = carrito.reduce((a, b) => ({ precioTotal: a.precioTotal + b.precioTotal }))
-    // console.log(nPrecio.precioTotal)
 
     // Limpiamos el elemento ya que necesitamos reemplazar su contenido
     footerCarrito.innerHTML = ''
@@ -116,6 +127,9 @@ const totalFooter = () => {
 
     template.querySelectorAll('td')[1].textContent = nProductos.cantidad
     template.querySelector('.font-weight-bold span').textContent = nPrecio.precioTotal
+
+    document.getElementById("hacer-pedido").hidden = false
+    //document.getElementById("estamos-trabajando-msg").hidden = false
 
     const clone = template.cloneNode(true)
     fragment.appendChild(clone)
@@ -138,16 +152,13 @@ const pintarEnCarrito = () => {
     const template = document.querySelector("#template-carrito").content;
     const fragment = document.createDocumentFragment();
 
-     console.log(carrito.ancho)
     carrito.forEach(item => {
-        //template.querySelector("th").textContent = item.id;
         template.querySelectorAll("td")[0].textContent = item.title;
-        template.querySelectorAll("td")[1].textContent = item.ancho;
-        template.querySelectorAll("td")[2].textContent = item.alto;
-        template.querySelectorAll("td")[3].textContent = item.cantidad;
+        template.querySelectorAll("td")[1].textContent = item.ancho + "x" + item.alto + " inches";
+        template.querySelectorAll("td")[2].textContent = item.cantidad;
         template.querySelector('.btn-danger').setAttribute('data-id', item.id)
         template.querySelector('.btn-info').setAttribute('data-id', item.id)
-        template.querySelectorAll("td")[5].textContent = item.precioTotal;
+        template.querySelectorAll("td")[4].textContent = "$" + item.precioTotal;
         const clone = template.cloneNode(true);
         fragment.appendChild(clone);
     })
@@ -164,19 +175,11 @@ const borrarItemCarrito = () => {
 
     btnAgregar.forEach(btn => {
         btn.addEventListener('click', () => {
-            // console.log(parseInt(btn.dataset.id))
             const arrayFiltrado = carrito.map(item => {
-                console.log(parseInt(btn.dataset.id))
-                //console.log(parseInt(btn.dataset.ancho))
-                console.log(item.ancho)
-                console.log(carrito.ancho)
-
                 if (item.id === parseInt(btn.dataset.id))
-                    //&& item.ancho === carrito.ancho) 
                     {
                     item.precioTotal = item.precioTotal + item.precioTotal/item.cantidad
                     item.cantidad++
-                     console.log(item.cantidad)
                     return item;
                 } else {
                     return item
@@ -185,7 +188,6 @@ const borrarItemCarrito = () => {
             carrito = [...arrayFiltrado]
             pintarEnCarrito()
             totalFooter()
-            //break btnAgregar
         })
         
     })
@@ -196,7 +198,6 @@ const borrarItemCarrito = () => {
                 if (item.id === parseInt(btn.dataset.id)) {
                     item.precioTotal = item.precioTotal - item.precioTotal/item.cantidad
                     item.cantidad--
-                    // console.log(item.cantidad)
                     if (item.cantidad === 0) {
                         return
                     }

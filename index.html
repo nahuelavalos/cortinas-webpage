@@ -13,7 +13,7 @@
   </head>
   <body>
     <div class="container">
-      <h1 class="mt-2">Cortinas Miami</h1>
+      <h1 class="mt-2"><br>Cortinas Miami</h1>
 
       <div class="row my-5" id="lista-productos">
         <template id="template-producto">
@@ -23,9 +23,11 @@
               <div class="card-body">
                 <h4 class="card-title"></h4>
                 <h8 class="card-ancho"></h8><br>
-                <span><input class="value-ancho" type="number" id="fila" name="fila" value="24" min="24" max="108" size="1" step=1 style="text-align:center; width: 5em; border:2px solid #c4c2c2"> </span><br>
+                <span><input class="value-ancho" type="number" id="fila" name="fila" value="24" min="24" max="108" size="1" step=1 style="text-align:center; width: 5em; border:2px solid #c4c2c2"> </span>
+                <h8 class="tag-ancho-error" type="text" style="color: #cc3d39"></h8><br>
                 <h8 class="card-alto"></h8><br>
-                <span><input class="value-alto" type="number" id="columna" name="columna" value="24" min="24" max="108" size="1" step=1 style="text-align:center; width: 5em; border:2px solid #c4c2c2"> </span><br>
+                <span><input class="value-alto" type="number" id="columna" name="columna" value="24" min="24" max="108" size="1" step=1 style="text-align:center; width: 5em; border:2px solid #c4c2c2"> </span>
+                <h8 class="tag-alto-error" type="text" style="color: #cc3d39"></h8><br><br>
                 <p class="card-text"> <span></span> </p>
                 <button class="btn btn-dark">Add</button>
               </div>
@@ -35,44 +37,43 @@
       </div>
 
       <div class="my-5">
-        <h4>Carrito de compras</h4>
+        <h4>Shopping Cart</h4>
         <table class="table">
           <thead>
             <tr>
               <th scope="col">Item</th>
-              <th scope="col">Ancho</th>
-              <th scope="col">Alto</th>
-              <th scope="col">Cantidad</th>
-              <th scope="col">Acción</th>
-              <th scope="col">Total</th>
+              <th scope="col">Size</th>
+              <th scope="col">Qty</th>
+              <th scope="col">Add/Quit</th>
+              <th scope="col" style="text-align: center;">Price</th>
             </tr>
           </thead>
           <tbody id="items"></tbody>
           <tfoot>
             <tr id="footer-carrito">
-                <th scope="row" colspan="5">Carrito vacío - comience a comprar!</th>
+                <th scope="row" colspan="5">Empty Cart</th>
             </tr>
-          </tfoot>
         </table>
+            <button class="btn btn-success float-right" id="hacer-pedido" style="margin-block-end: 5px;"  hidden>Make an Order</button><br><br>
+            <!--p class="estamos-trabajando float-right" id="estamos-trabajando-msg" style="margin-block-end: 50px; color: #757575;" hidden>Functionality not available at the moment &nbsp;</p-->
       </div>
     </div>
 
     <template id="template-footer">
-        <th scope="row" colspan="2">Total productos</th>
-        <td></td><td>10</td>
+        <th scope="row" colspan="1">Total</th>
+        <td></td><td></td>
         <td>
             <button class="btn btn-danger btn-sm" id="vaciar-carrito">
-                vaciar todo
+                Clean
             </button>
         </td>
-        <td class="font-weight-bold">$ <span>5000</span></td>
+        <td class="font-weight-bold" style="text-align: center;">$<span>5000</span></td>    
     </template>
 
     <template id="template-carrito">
       <tr>
         
         <td>Café</td>
-        <td>1</td>
         <td>1</td>
         <td>1</td>
         <td>
@@ -83,7 +84,7 @@
                 -
             </button>
         </td>
-        <td>$500</td>
+        <td class="font-weight" style="text-align: center;">$<span>5000</span></td> 
       </tr>
     </template>
 
